@@ -101,8 +101,9 @@ function draw() {
   if (frameCounter % 180 === 0) {
     pansArray.push(new Pan(panImages[Math.floor(Math.random() * panImages.length)]));// add random here afterwards to randomize the image
   }
-
+  catchPan();
   frameCounter++;
+
 }
 
 function intersectParent(parent, object) {
@@ -123,17 +124,36 @@ function intersectParent(parent, object) {
   );
 }
 
+function intersectGround(object) {
+
+  let groundbottom = 800;
+  let objectbottom = object.y + object.height;
+  return (
+    groundbottom < objectbottom
+  );
+}
+
+function catchPan() {
+  for (var i = 0; i < pansArray.length; i++) {
+    let object = pansArray[i];
+    if (intersectGround(object)) {
+      console.log("BAAAAD")
+    } else if (intersectParent(mom, object)) {
+      console.log("yayyyyy")
+    }
+  }
+}
+
 window.onload = function () {
   canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
   mom = new Parent(momImg, 100, 150, 350, 650)
 
-  setInterval(draw, 40)
+  setInterval(draw, 10)
 
   window.onkeydown = (event) => {
     if (event.keyCode === 39) {
       mom.moveRight();
-      console.log("hello")
     } else if (event.keyCode === 37) {
       mom.moveLeft();
     }
