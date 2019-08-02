@@ -9,6 +9,8 @@ bigPanImg.src = "./images/big-pan.png";
 
 const panImages = [fryingPanImg, bigPanImg]
 
+let audios = [...document.querySelectorAll("audio")];
+
 //let randomPanImage = panImages[Math.floor(Math.random() * panImages.length)];
 
 let canvas;
@@ -86,8 +88,9 @@ class Pan extends SleepEnemy {
 
 
 function draw() {
-  ctx.fillStyle = "blue";
-  ctx.fillRect(0, 0, 800, 800);
+  // ctx.fillStyle = "blue";
+  ctx.clearRect(0, 0, 800, 850);
+  //ctx.fillRect(0, 0, 800, 800);
   mom.draw();
   pansArray.forEach((pan) => {
     pan.draw()
@@ -137,12 +140,23 @@ function catchPan() {
   for (var i = 0; i < pansArray.length; i++) {
     let object = pansArray[i];
     if (intersectGround(object)) {
-      console.log("BAAAAD")
+      pan1.play();
     } else if (intersectParent(mom, object)) {
-      console.log("yayyyyy")
+      femaleRelief.play();
     }
   }
 }
+
+
+let silence1 = false;
+
+function muteAudio() {
+  if (silence1) audi.muted = true;
+  else audi.muted = false;
+  silence1 = !silence;
+}
+
+
 
 window.onload = function () {
   canvas = document.getElementById('canvas');
@@ -157,6 +171,8 @@ window.onload = function () {
     } else if (event.keyCode === 37) {
       mom.moveLeft();
     }
+
+    document.getElementById("mute-button").onclick = muteAudio()
   }
 
 

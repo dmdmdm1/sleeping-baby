@@ -1,3 +1,13 @@
+body {
+  display: flex;
+  align-items: center;
+}
+
 canvas {
-  border: 1px solid red;
+  border: 1px solid blue;
+  background-image: url("./images/sleeping-baby.jpg");
+  background-repeat: repeat-y;
+  background-size: 790px 790px;
+  background-position: center;
+  z-index: 2;
 }
