@@ -13,6 +13,8 @@ let audios = [...document.querySelectorAll("audio")];
 
 let score = 0;
 
+let displayScore;
+
 //let randomPanImage = panImages[Math.floor(Math.random() * panImages.length)];
 
 let canvas;
@@ -144,9 +146,13 @@ function catchPan() {
     if (intersectGround(object)) {
       pan1.play();
       object.intersects = true;
+      score -= 10;
+      displayScore.innerText = `${score}`
     } else if (intersectParent(mom, object)) {
       femaleRelief.play();
       object.intersects = true;
+      score += 10;
+      displayScore.innerText = `${score}`
     }
   }
   pansArray = pansArray.filter(obj => !obj.intersects);
@@ -169,6 +175,8 @@ window.onload = function () {
   mom = new Parent(momImg, 100, 150, 350, 650)
 
   setInterval(draw, 10)
+
+  displayScore = document.getElementById("score")
 
   window.onkeydown = (event) => {
     if (event.keyCode === 39) {
