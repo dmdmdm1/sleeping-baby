@@ -15,6 +15,15 @@ let score = 0;
 
 let displayScore;
 
+let displayLevel;
+
+let gameDone = false;
+
+let level = 0;
+
+let panSpeed = 10;
+
+
 //let randomPanImage = panImages[Math.floor(Math.random() * panImages.length)];
 
 let canvas;
@@ -90,7 +99,7 @@ class Pan extends SleepEnemy {
 
 // let sleepEnemies = [new SleepEnemy(10, 10, blue), new SleepEnemy(10, 10, red)]
 
-
+// formula to according to level to recalculate the speed  we don't have to manipulate variables use this source of truth 
 function draw() {
   // ctx.fillStyle = "blue";
   ctx.clearRect(0, 0, 800, 850);
@@ -101,7 +110,7 @@ function draw() {
   })
   if (frameCounter % 10 === 0) {
     pansArray.forEach((pan) => {
-      pan.y += 10;
+      pan.y += panSpeed;
     })
   }
   // every two seconds
@@ -143,19 +152,47 @@ function intersectGround(object) {
 function catchPan() {
   for (var i = 0; i < pansArray.length; i++) {
     let object = pansArray[i];
+
+    if (score < 0) {
+      gameOver();
+    } else if (score > 1000) {
+      win();
+    }
+
     if (intersectGround(object)) {
       pan1.play();
       object.intersects = true;
       score -= 10;
-      displayScore.innerText = `${score}`
+      displayScore.innerText = `${score}`;
     } else if (intersectParent(mom, object)) {
       femaleRelief.play();
       object.intersects = true;
       score += 10;
-      displayScore.innerText = `${score}`
+      displayScore.innerText = `${score}`;
+      if (score >= 100 && score % 100 === 0) {
+        level += 1;
+        panSpeed += level;
+        displayLevel.innerText = `${level}`;
+        if (level === 10) { // is this really necessary?
+          level === 0;
+        }
+      }
     }
   }
   pansArray = pansArray.filter(obj => !obj.intersects);
+  console.log(panSpeed);
+}
+
+function gameOver() {
+  ctx.clearRect(0, 0, 800, 800);
+  displayScore.innerText = "Game Over";
+  gameDone = true;
+}
+
+function win() {
+  ctx.clearRect(0, 0, 800, 800);
+  displayScore.innerText = "Win! you get some sleep for yourself!";
+  gameDone = true;
 }
 
 
@@ -176,7 +213,8 @@ window.onload = function () {
 
   setInterval(draw, 10)
 
-  displayScore = document.getElementById("score")
+  displayScore = document.getElementById("score");
+  displayLevel = document.getElementById("level");
 
   window.onkeydown = (event) => {
     if (event.keyCode === 39) {
@@ -189,22 +227,11 @@ window.onload = function () {
   }
 
 
-
-
-
-  // declare a function in which the sleep objects start falling maybe make a subclass called pans and add
-  // some different ones : pans and skillets , thenn implement the collision detection 
 }
 
 
 /* QUESTIONS
 
-Super w/o arguments
+
 appreciate `a code review, clean code and well organized
-Frame counter vs Request Animation Frame?
-Pan is added and now disappearing because canvas needs to get redrawn
-sparring partner to discuss data  structures and order of the code
-collision detection
-I have the parent that needs to be drawn and then the objects which position is being updated
-how do I organize this?
 */
