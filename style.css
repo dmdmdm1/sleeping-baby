@@ -1,6 +1,7 @@
-body {
+/* body {
   display: flex;
   align-items: center;
+  align-content: space-around;
 }
 
 canvas {
@@ -10,4 +11,35 @@ canvas {
   background-size: 790px 790px;
   background-position: center;
   z-index: 2;
+}
+
+#game-score {
+  display: flex;
+  align-items: center;
+}
+
+.score-box {
+
+} */
+
+body {
+  display: grid;
+  grid-template-columns: 1.5fr 3fr 1.5fr;
+  grid-gap: 30px;
+}
+
+canvas {
+  border: 1px solid blue;
+  background-image: url("./images/sleeping-baby.jpg");
+  background-repeat: repeat-y;
+  background-size: 790px 790px;
+  background-position: center;
+  z-index: 2;
+  grid-column: 2/4;
+}
+
+#score-box {
+  border: 1px solid red;
+  height: 40px;
+  width: 30%;
 }

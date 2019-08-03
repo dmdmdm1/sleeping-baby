@@ -11,6 +11,8 @@ const panImages = [fryingPanImg, bigPanImg]
 
 let audios = [...document.querySelectorAll("audio")];
 
+let score = 0;
+
 //let randomPanImage = panImages[Math.floor(Math.random() * panImages.length)];
 
 let canvas;
@@ -102,7 +104,7 @@ function draw() {
   }
   // every two seconds
   if (frameCounter % 180 === 0) {
-    pansArray.push(new Pan(panImages[Math.floor(Math.random() * panImages.length)]));// add random here afterwards to randomize the image
+    pansArray.push(new Pan(panImages[Math.floor(Math.random() * panImages.length)]));
   }
   catchPan();
   frameCounter++;
@@ -141,20 +143,23 @@ function catchPan() {
     let object = pansArray[i];
     if (intersectGround(object)) {
       pan1.play();
+      object.intersects = true;
     } else if (intersectParent(mom, object)) {
       femaleRelief.play();
+      object.intersects = true;
     }
   }
+  pansArray = pansArray.filter(obj => !obj.intersects);
 }
 
 
-let silence1 = false;
+// let silence1 = false;
 
-function muteAudio() {
-  if (silence1) audi.muted = true;
-  else audi.muted = false;
-  silence1 = !silence;
-}
+// function muteAudio() {
+//   if (silence1) audio.muted = true;
+//   else audio.muted = false;
+//   silence1 = !silence;
+// }
 
 
 
@@ -172,7 +177,7 @@ window.onload = function () {
       mom.moveLeft();
     }
 
-    document.getElementById("mute-button").onclick = muteAudio()
+    // document.getElementById("mute-button").onclick = muteAudio()
   }
 
 
