@@ -9,6 +9,9 @@ bigPanImg.src = "./images/big-pan.png";
 
 const panImages = [fryingPanImg, bigPanImg]
 
+const coffeeImg = new Image();
+coffeeImg.src = "./images/coffee.jpg"
+
 let audios = [...document.querySelectorAll("audio")];
 
 let score = 0;
@@ -23,6 +26,10 @@ let level = 0;
 
 let panSpeed = 10;
 
+let parentSpeedLeft = 20;
+
+let parentSpeedRight = 20;
+
 
 //let randomPanImage = panImages[Math.floor(Math.random() * panImages.length)];
 
@@ -31,6 +38,7 @@ let ctx;
 let mom;
 let pan;
 let pansArray = [];
+let coffeeArray = [];
 let frameCounter = 0;
 
 class Parent {
@@ -46,7 +54,7 @@ class Parent {
     if (this.x === 730) {
       this.x = 730;
     } else {
-      this.x += 20;
+      this.x += parentSpeedRight;
     }
   }
 
@@ -54,7 +62,7 @@ class Parent {
     if (this.x === -30) {
       this.x = -30;
     } else {
-      this.x -= 20;
+      this.x -= parentSpeedLeft;
     }
   }
 
@@ -78,6 +86,19 @@ class Pan extends SleepEnemy {
     //super do I need to use super here? as I am not passing arguments?
     super()
     this.image = image;
+  }
+  draw() {
+    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+  }
+}
+
+class Coffee {
+  constructor() {
+    this.x = Math.floor(Math.random() * canvas.width - 50);
+    this.y = 0;
+    this.height = 40;
+    this.width = 60;
+    this.image = coffeeImg;
   }
   draw() {
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
@@ -108,19 +129,28 @@ function draw() {
   pansArray.forEach((pan) => {
     pan.draw()
   })
+  coffeeArray.forEach((coffee) => {
+    coffee.draw()
+  })
+
   if (frameCounter % 10 === 0) {
     pansArray.forEach((pan) => {
       pan.y += panSpeed;
     })
+    coffeeArray.forEach((coffee) => {
+      coffee.y += 20;
+    })
   }
-  // every two seconds
+  // every three seconds
   if (frameCounter % 180 === 0) {
     pansArray.push(new Pan(panImages[Math.floor(Math.random() * panImages.length)]));
+
   }
   catchPan();
+  drinkCoffee();
   frameCounter++;
-
 }
+
 
 function intersectParent(parent, object) {
   let parentleft = parent.x;
@@ -155,7 +185,7 @@ function catchPan() {
 
     if (score < 0) {
       gameOver();
-    } else if (score > 1000) {
+    } else if (level > 9) {
       win();
     }
 
@@ -173,15 +203,38 @@ function catchPan() {
         level += 1;
         panSpeed += level;
         displayLevel.innerText = `${level}`;
+        if (level % 1 === 0) {
+          coffeeArray.push(new Coffee());
+        }
         if (level === 10) { // is this really necessary?
           level === 0;
+        }
+        if (level % 2 === 0) {
+          parentSpeedLeft -= 2;
+          parentSpeedRight -= 2;
+          console.log(parentSpeedRight);
+          console.log(parentSpeedLeft);
         }
       }
     }
   }
   pansArray = pansArray.filter(obj => !obj.intersects);
-  console.log(panSpeed);
 }
+
+function drinkCoffee() {
+  for (var i = 0; i < coffeeArray.length; i++) {
+    let object = coffeeArray[i];
+    if (intersectGround(object)) {
+      object.intersects = true;
+    } else if (intersectParent(mom, object)) {
+      object.intersects = true;
+      parentSpeedLeft += 3;
+      parentSpeedRight += 3;
+    }
+  }
+  coffeeArray = coffeeArray.filter(obj => !obj.intersects);
+}
+
 
 function gameOver() {
   ctx.clearRect(0, 0, 800, 800);
@@ -191,7 +244,7 @@ function gameOver() {
 
 function win() {
   ctx.clearRect(0, 0, 800, 800);
-  displayScore.innerText = "Win! you get some sleep for yourself!";
+  displayScore.innerText = "Win! You survived and cann sleep now!";
   gameDone = true;
 }
 
