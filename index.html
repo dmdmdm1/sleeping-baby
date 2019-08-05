@@ -9,14 +9,13 @@
     <title>Sleeping Baby</title>
   </head>
   <body>
-    <div class="game-intro">
-      <img src=""" alt="" class="logo-img" />
-      <br />
-      <header>Instructions</header>
-      <p>Use the left and right arrow to move the parent!</p>
-      <!-- <img src="./images/arrows.png" alt="" class="arrows-img" /> -->
-      <button id="start-button">StartGame</button>
-      <button id="mute-button">Mute</button>
+    <div class="header">
+      <div class="game-intro">
+        <img src="./images/quiet-pls.png" alt="" class="quiet" />
+        <br />
+        <button id="start-button">Start Game</button>
+        <button id="mute-button">Mute</button>
+      </div>
     </div>
     <div id="game-board">
       <canvas id="canvas" width="800" height="800"> </canvas>
@@ -26,12 +25,15 @@
       <div class="score-box">
         <span id="score">0</span>
       </div>
-      <div id="game-level">
-        <span id="your-level"> # Of Sleepless Nights</span>
-        <div class="level-box">
-          <span id="level">0</span>
-        </div>
     </div>
+    <div id="game-level">
+      <span id="your-level"> # Of Sleepless Nights</span>
+      <div class="level-box">
+        <span id="level">0</span>
+      </div>
+    </div>
+
+    <!-- <footer>Footer</footer> -->
     <audio id="pan1" src="./sounds/pan_falling_1.wav"></audio>
     <audio id="femaleRelief" src="./sounds/yeah-female.wav"></audio>
   </body>

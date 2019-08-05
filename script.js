@@ -1,5 +1,9 @@
+const startImage = new Image();
+startImage.src = "./images/baby-start.jpg";
+
 const momImg = new Image();
 momImg.src = "./images/momavatar.png";
+
 
 const fryingPanImg = new Image();
 fryingPanImg.src = "./images/frying-pan.png";
@@ -20,7 +24,7 @@ let displayScore;
 
 let displayLevel;
 
-let gameDone = false;
+let gameDone = true;
 
 let level = 0;
 
@@ -29,9 +33,6 @@ let panSpeed = 10;
 let parentSpeedLeft = 20;
 
 let parentSpeedRight = 20;
-
-
-//let randomPanImage = panImages[Math.floor(Math.random() * panImages.length)];
 
 let canvas;
 let ctx;
@@ -106,19 +107,27 @@ class Coffee {
 }
 
 
+function startScreen() {
+  ctx.drawImage(startImage, 0, 0, 800, 800);
+  ctx.font = "bold 25px baby";
+  ctx.fillText(
+    "Try to catch up anything that can wake the baby by falling",
+    32,
+    35
+  ),
+    ctx.font = "bold 25px baby";
+  ctx.fillText("Use the left and right arrows",
+    26,
+    140);
+  (ctx.font = "bold 20px baby");
+  ctx.fillText("And don't forget to drink your coffee !", 500, 160);
+}
 
+function startGame() {
+  setInterval(draw, 10)
+  gameDone = false;
+}
 
-
-//       // drawSleepEnemy(){
-//       //   ctx.fillStyle = this.color
-//       //   ctx.fillRect(this.x, this.y, this.width, this.height)
-//       // }
-
-//   }
-// }
-
-
-// let sleepEnemies = [new SleepEnemy(10, 10, blue), new SleepEnemy(10, 10, red)]
 
 // formula to according to level to recalculate the speed  we don't have to manipulate variables use this source of truth 
 function draw() {
@@ -258,13 +267,27 @@ function win() {
 // }
 
 
-
 window.onload = function () {
   canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
+
   mom = new Parent(momImg, 100, 150, 350, 650)
 
-  setInterval(draw, 10)
+  if (gameDone) {
+    startScreen();
+  } else {
+    //setInterval(draw, 10)
+    startGame();
+  }
+
+  // Start Button
+  document.getElementById("start-button").onclick = function () {
+    if (gameDone) {
+      startGame();
+      gameDone = false;
+    }
+  };
+
 
   displayScore = document.getElementById("score");
   displayLevel = document.getElementById("level");
@@ -288,3 +311,5 @@ window.onload = function () {
 
 appreciate `a code review, clean code and well organized
 */
+
+
