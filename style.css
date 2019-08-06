@@ -1,5 +1,3 @@
-
-
 @font-face {
   font-family: "baby";
   src: url("./fonts/babies.ttf");
@@ -10,18 +8,24 @@ body {
   background-image: url("./images/stars.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  font-family: baby;
+  min-height: 100px;
+}
+
+.container {
   display: flex;
   align-content: center;
   align-items: flex-start;
   justify-content: space-evenly;
-  font-family: baby;
+  flex: 1;
+  min-height: 90vh;
+  margin-top: 40px;
 }
-
 
 .quiet {
   width: 30vh;
   height: 35vh;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 p {
@@ -29,74 +33,77 @@ p {
   font-size: 1.5em;
 }
 
-button{
+button {
   width: 20vh;
   height: 10vh;
   font-family: baby;
   font-size: 1.5em;
+  cursor: pointer;
 }
 
 .game-intro {
   height: 70vh;
 }
-/* .main {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  position: relative;
-  list-style: none;
-  width: 500px;
-  height: 200px;
-  margin-bottom: 20;
-}
-
-li {
-  padding: 20px;
-}
-
-.title {
-  flex: 0 1 auto;
-  width: 400vh;
-  height: 100vh;
-  position: absolute; /* new */
-
-
-/* .game-intro {
-  grid-column: 1/2;
-  color: blue;
-} */
-
 canvas {
-  border: 1px solid blue;
   background-image: url("./images/sleeping-baby.jpg");
   background-repeat: repeat-y;
   background-size: 790px 790px;
   background-position: center;
-  margin-top: 40px;
-} 
+}
 
 #game-score {
   color: blue;
   font-size: 1.5em;
-} 
+  height: 10vh;
+  margin-top: 10px;
+}
 
 #game-level {
   color: blue;
   font-size: 1.5em;
-
+  height: 10vh;
 }
 
-/*
-
-footer {
+h3 {
   text-align: center;
-  background-color: blueviolet; */
-  /* position: fixed;
-  width: 100%; */
+  font-size: 1.5em;
+  margin-top: -10px;
 }
 
-/* #score-box {
-  border: 1px solid red;
-  height: 40px;
-  width: 30%;
-} */ 
+#your-score,
+#your-level {
+  border: 1px solid white;
+  background-color: white;
+  height: 5vh;
+  margin-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.score-box,
+.level-box {
+  border: 1px solid white;
+  margin-top: 10px;
+  background-color: white;
+  height: 5vh;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.info-boxes {
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+}
+
+#game-score {
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+#game-level {
+  margin-left: 1px;
+  margin-top: 5px;
+}

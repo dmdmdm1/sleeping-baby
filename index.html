@@ -9,31 +9,33 @@
     <title>Sleeping Baby</title>
   </head>
   <body>
-    <div class="header">
-      <div class="game-intro">
-        <img src="./images/quiet-pls.png" alt="" class="quiet" />
-        <br />
-        <button id="start-button">Start Game</button>
-        <button id="mute-button">Mute</button>
+    <div class="container">
+      <div class="header">
+        <div class="game-intro">
+          <img src="./images/quiet-pls.png" alt="" class="quiet" />
+          <br />
+          <button id="start-button">Start Game</button>
+          <button id="mute-button">Mute</button>
+        </div>
+      </div>
+      <div id="game-board">
+        <canvas id="canvas" width="800" height="800"> </canvas>
+      </div>
+      <div class="info-boxes"></div>
+      <div id="game-score">
+        <span id="your-score"> Saved Naps </span>
+        <div class="score-box">
+          <span id="score">0</span>
+        </div>
+      </div>
+      <div id="game-level">
+        <span id="your-level"> # Of Sleepless Nights </span>
+        <div class="level-box">
+          <span id="level">0</span>
+        </div>
       </div>
     </div>
-    <div id="game-board">
-      <canvas id="canvas" width="800" height="800"> </canvas>
-    </div>
-    <div id="game-score">
-      <span id="your-score">Shuteye Score</span>
-      <div class="score-box">
-        <span id="score">0</span>
-      </div>
-    </div>
-    <div id="game-level">
-      <span id="your-level"> # Of Sleepless Nights</span>
-      <div class="level-box">
-        <span id="level">0</span>
-      </div>
-    </div>
-
-    <!-- <footer>Footer</footer> -->
+    <h3>Made with 💜 and no 😴 by <a href="https://github.com/dmdmdm1"> Ayda Macink </a></h3></h3>
     <audio id="pan1" src="./sounds/pan_falling_1.wav"></audio>
     <audio id="femaleRelief" src="./sounds/yeah-female.wav"></audio>
   </body>

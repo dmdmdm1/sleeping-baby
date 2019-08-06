@@ -4,7 +4,6 @@ startImage.src = "./images/baby-start.jpg";
 const momImg = new Image();
 momImg.src = "./images/momavatar.png";
 
-
 const fryingPanImg = new Image();
 fryingPanImg.src = "./images/frying-pan.png";
 
@@ -14,7 +13,39 @@ bigPanImg.src = "./images/big-pan.png";
 const panImages = [fryingPanImg, bigPanImg]
 
 const coffeeImg = new Image();
-coffeeImg.src = "./images/coffee.jpg"
+coffeeImg.src = "./images/coffee.jpeg";
+
+const crying1Img = new Image();
+crying1Img.src = "./images/crying1.jpeg";
+
+const crying2Img = new Image();
+crying2Img.src = "./images/crying2.jpeg";
+
+const crying3Img = new Image();
+crying3Img.src = "./images/crying3.jpeg";
+
+const crying4Img = new Image();
+crying4Img.src = "./images/crying4.jpeg";
+
+const crying5Img = new Image();
+crying5Img.src = "./images/crying5.jpeg";
+
+const crying6Img = new Image();
+crying6Img.src = "./images/crying6.jpeg";
+
+const cryingBabiesImages = [crying1Img, crying2Img, crying3Img, crying4Img, crying5Img, crying6Img];
+
+let randomBabyImage = cryingBabiesImages[Math.floor(Math.random() * cryingBabiesImages.length)]
+
+const sleepingBabyImage = new Image();
+sleepingBabyImage.src = "./images/sleeping-baby.jpeg";
+
+const pacifier = new Image();
+pacifier.src = "./images/pacifier.jpeg";
+
+let pacifiers = [];
+
+let lives = 3;
 
 let audios = [...document.querySelectorAll("audio")];
 
@@ -106,26 +137,42 @@ class Coffee {
   }
 }
 
-
 function startScreen() {
   ctx.drawImage(startImage, 0, 0, 800, 800);
-  ctx.font = "bold 25px baby";
+  ctx.font = "bold 30px baby";
   ctx.fillText(
     "Try to catch up anything that can wake the baby by falling",
     32,
     35
   ),
-    ctx.font = "bold 25px baby";
+    ctx.font = "bold 30px baby";
   ctx.fillText("Use the left and right arrows",
     26,
     140);
-  (ctx.font = "bold 20px baby");
-  ctx.fillText("And don't forget to drink your coffee !", 500, 160);
+  (ctx.font = "bold 25px baby");
+  ctx.fillText("And don't forget to drink your coffee !", 400, 160);
 }
+
+function wakeUpScreen() {
+  ctx.drawImage(randomBabyImage, 0, 0, 800, 800);
+}
+
+function winScreen() {
+  ctx.drawImage(sleepingBabyImage, 0, 0, 800, 800);
+}
+
 
 function startGame() {
   setInterval(draw, 10)
   gameDone = false;
+}
+
+function drawLives() {
+  space = 0;
+  for (let i = 0; i < lives; i++) {
+    ctx.drawImage(pacifier, 10 + space, 10, 24, 24);
+    space += 34;
+  }
 }
 
 
@@ -134,6 +181,7 @@ function draw() {
   // ctx.fillStyle = "blue";
   ctx.clearRect(0, 0, 800, 850);
   //ctx.fillRect(0, 0, 800, 800);
+  drawLives();
   mom.draw();
   pansArray.forEach((pan) => {
     pan.draw()
@@ -192,17 +240,16 @@ function catchPan() {
   for (var i = 0; i < pansArray.length; i++) {
     let object = pansArray[i];
 
-    if (score < 0) {
+    if (lives < 1) {
       gameOver();
-    } else if (level > 9) {
+    } else if (level > 9 || score >= 150) {
       win();
     }
 
     if (intersectGround(object)) {
       pan1.play();
       object.intersects = true;
-      score -= 10;
-      displayScore.innerText = `${score}`;
+      lives -= 1;
     } else if (intersectParent(mom, object)) {
       femaleRelief.play();
       object.intersects = true;
@@ -247,13 +294,16 @@ function drinkCoffee() {
 
 function gameOver() {
   ctx.clearRect(0, 0, 800, 800);
+  wakeUpScreen();
   displayScore.innerText = "Game Over";
+  displayLevel.innerText = "10 and counting..."
   gameDone = true;
 }
 
 function win() {
   ctx.clearRect(0, 0, 800, 800);
-  displayScore.innerText = "Win! You survived and cann sleep now!";
+  winScreen();
+  displayScore.innerText = "Win!";
   gameDone = true;
 }
 
