@@ -22,18 +22,15 @@ const crying2Img = new Image();
 crying2Img.src = "./images/crying2.jpeg";
 
 const crying3Img = new Image();
-crying3Img.src = "./images/crying3.jpeg";
+crying3Img.src = "./images/crying4.jpeg";
 
 const crying4Img = new Image();
-crying4Img.src = "./images/crying4.jpeg";
+crying4Img.src = "./images/crying5.jpeg";
 
 const crying5Img = new Image();
-crying5Img.src = "./images/crying5.jpeg";
+crying5Img.src = "./images/crying6.jpeg";
 
-const crying6Img = new Image();
-crying6Img.src = "./images/crying6.jpeg";
-
-const cryingBabiesImages = [crying1Img, crying2Img, crying4Img, crying5Img, crying6Img];
+const cryingBabiesImages = [crying1Img, crying2Img, crying3Img, crying4Img, crying5Img];
 
 let randomBabyImage = cryingBabiesImages[Math.floor(Math.random() * cryingBabiesImages.length)]
 
@@ -83,17 +80,14 @@ class Parent {
   }
 
   moveRight() {
-    if (this.x === 730) {
-      this.x = 730;
-    } else {
+    if (this.x < 730) {
       this.x += parentSpeedRight;
     }
   }
 
+
   moveLeft() {
-    if (this.x === -30) {
-      this.x = -30;
-    } else {
+    if (this.x > -30) {
       this.x -= parentSpeedLeft;
     }
   }
@@ -106,7 +100,7 @@ class Parent {
 
 class SleepEnemy {
   constructor() {
-    this.x = Math.floor(Math.random() * canvas.width - 50); // -100 (Breite des Bildes) weil sonst außerhalb des Bildrandes
+    this.x = Math.floor(Math.random() * (canvas.width - 80));
     this.y = 0;//Math.floor(Math.random() * -100);
     this.height = 50;
     this.width = 80;
@@ -114,8 +108,7 @@ class SleepEnemy {
 }
 
 class Pan extends SleepEnemy {
-  constructor(image) {//maybe not pass img as an argument since it will always be the same img or maybe later randomize it between an array of different pans 
-    //super do I need to use super here? as I am not passing arguments?
+  constructor(image) {
     super()
     this.image = image;
   }
@@ -222,7 +215,6 @@ function draw() {
   if (lives > 0 && !gameDone) {
     playGame();
     if (score >= 150) {
-      console.log(score);
       win();
     }
   } else if (lives < 1) {
@@ -293,8 +285,6 @@ function catchPan() {
         if (level % 2 === 0) {
           parentSpeedLeft -= 2;
           parentSpeedRight -= 2;
-          console.log(parentSpeedRight);
-          console.log(parentSpeedLeft);
         }
       }
     }
@@ -355,7 +345,6 @@ window.onload = function () {
   // Start Button
   document.getElementById("start-button").onclick = function () {
     if (gameDone) {
-      console.log("I'm the button");
       startGame();
       gameDone = false;
     }
