@@ -141,7 +141,7 @@ function startScreen() {
   ctx.drawImage(startImage, 0, 0, 800, 800);
   ctx.font = "bold 30px baby";
   ctx.fillText(
-    "Try to catch up anything that can wake the baby by falling",
+    "Try to catch anything that can wake the baby by falling",
     32,
     35
   ),
@@ -153,18 +153,28 @@ function startScreen() {
   ctx.fillText("And don't forget to drink your coffee !", 400, 160);
 }
 
-function wakeUpScreen() {
+function drawWakeUpScreen() {
   ctx.drawImage(randomBabyImage, 0, 0, 800, 800);
+  displayScore.innerText = "Game Over";
+  displayLevel.innerText = "ten and counting..."
 }
+
 
 function winScreen() {
   ctx.drawImage(sleepingBabyImage, 0, 0, 800, 800);
+  displayScore.innerText = "Win!";
 }
 
 
 function startGame() {
-  setInterval(draw, 10)
   gameDone = false;
+  console.log("starting game");
+  lives = 3;
+  score = 0;
+  level = 0;
+  pacifiers = [];
+  pansArray = [];
+  crying.pause();
 }
 
 function drawLives() {
@@ -175,12 +185,8 @@ function drawLives() {
   }
 }
 
-
-// formula to according to level to recalculate the speed  we don't have to manipulate variables use this source of truth 
-function draw() {
-  // ctx.fillStyle = "blue";
+function playGame() {
   ctx.clearRect(0, 0, 800, 850);
-  //ctx.fillRect(0, 0, 800, 800);
   drawLives();
   mom.draw();
   pansArray.forEach((pan) => {
@@ -199,13 +205,36 @@ function draw() {
     })
   }
   // every three seconds
-  if (frameCounter % 180 === 0) {
+  if (frameCounter % 180 === 0 && !gameDone) {
     pansArray.push(new Pan(panImages[Math.floor(Math.random() * panImages.length)]));
 
   }
   catchPan();
   drinkCoffee();
   frameCounter++;
+}
+
+
+// formula to according to level to recalculate the speed  we don't have to manipulate variables use this source of truth 
+function draw() {
+  if (lives > 0 && !gameDone) {
+    playGame();
+    if (score >= 150) {
+      console.log(score);
+      win();
+    }
+  } else if (lives < 1) {
+    if (!gameDone) {
+      crying.play()
+      setTimeout(() => {
+        crying.pause();
+        crying.currentTime = 0;
+      }, 10000);
+    }
+    gameOver();
+  } else if (score >= 150) {
+    win();
+  }
 }
 
 
@@ -239,12 +268,6 @@ function intersectGround(object) {
 function catchPan() {
   for (var i = 0; i < pansArray.length; i++) {
     let object = pansArray[i];
-
-    if (lives < 1) {
-      gameOver();
-    } else if (level > 9 || score >= 150) {
-      win();
-    }
 
     if (intersectGround(object)) {
       pan1.play();
@@ -293,18 +316,16 @@ function drinkCoffee() {
 
 
 function gameOver() {
-  ctx.clearRect(0, 0, 800, 800);
-  wakeUpScreen();
-  displayScore.innerText = "Game Over";
-  displayLevel.innerText = "10 and counting..."
   gameDone = true;
+  drawWakeUpScreen();
 }
 
 function win() {
-  ctx.clearRect(0, 0, 800, 800);
-  winScreen();
-  displayScore.innerText = "Win!";
   gameDone = true;
+  clearInterval(draw, 10);
+  pan1.pause();
+  snoring.play();
+  winScreen();
 }
 
 
@@ -320,27 +341,22 @@ function win() {
 window.onload = function () {
   canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
-
   mom = new Parent(momImg, 100, 150, 350, 650)
+  displayScore = document.getElementById("score");
+  displayLevel = document.getElementById("level");
 
-  if (gameDone) {
-    startScreen();
-  } else {
-    //setInterval(draw, 10)
-    startGame();
-  }
+
+  startScreen();
+  setInterval(draw, 10);
 
   // Start Button
   document.getElementById("start-button").onclick = function () {
     if (gameDone) {
+      console.log("I'm the button");
       startGame();
       gameDone = false;
     }
-  };
-
-
-  displayScore = document.getElementById("score");
-  displayLevel = document.getElementById("level");
+  }
 
   window.onkeydown = (event) => {
     if (event.keyCode === 39) {
@@ -358,6 +374,7 @@ window.onload = function () {
 
 /* QUESTIONS
 
+HOW TO STOP THE SOUNDS
 
 appreciate `a code review, clean code and well organized
 */
