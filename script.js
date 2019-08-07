@@ -33,7 +33,7 @@ crying5Img.src = "./images/crying5.jpeg";
 const crying6Img = new Image();
 crying6Img.src = "./images/crying6.jpeg";
 
-const cryingBabiesImages = [crying1Img, crying2Img, crying3Img, crying4Img, crying5Img, crying6Img];
+const cryingBabiesImages = [crying1Img, crying2Img, crying4Img, crying5Img, crying6Img];
 
 let randomBabyImage = cryingBabiesImages[Math.floor(Math.random() * cryingBabiesImages.length)]
 
@@ -168,13 +168,15 @@ function winScreen() {
 
 function startGame() {
   gameDone = false;
-  console.log("starting game");
+  displayScore.innerText = "0";
+  displayLevel.innerText = "0";
   lives = 3;
   score = 0;
   level = 0;
   pacifiers = [];
   pansArray = [];
   crying.pause();
+  snoring.pause();
 }
 
 function drawLives() {
@@ -305,6 +307,7 @@ function drinkCoffee() {
     let object = coffeeArray[i];
     if (intersectGround(object)) {
       object.intersects = true;
+      drinkingCoffee.play();
     } else if (intersectParent(mom, object)) {
       object.intersects = true;
       parentSpeedLeft += 3;
