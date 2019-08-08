@@ -44,7 +44,7 @@ let pacifiers = [];
 
 let lives = 3;
 
-let audios = [...document.querySelectorAll("audio")];
+let audiosArray;
 
 let score = 0;
 
@@ -84,7 +84,6 @@ class Parent {
       this.x += parentSpeedRight;
     }
   }
-
 
   moveLeft() {
     if (this.x > -30) {
@@ -153,13 +152,13 @@ function drawWakeUpScreen() {
 }
 
 
-function winScreen() {
+function drawWinScreen() {
   ctx.drawImage(sleepingBabyImage, 0, 0, 800, 800);
   displayScore.innerText = "Win!";
 }
 
 
-function startGame() {
+function initialize() {
   gameDone = false;
   displayScore.innerText = "0";
   displayLevel.innerText = "0";
@@ -209,8 +208,6 @@ function playGame() {
   frameCounter++;
 }
 
-
-// formula to according to level to recalculate the speed  we don't have to manipulate variables use this source of truth 
 function draw() {
   if (lives > 0 && !gameDone) {
     playGame();
@@ -258,7 +255,7 @@ function intersectGround(object) {
     groundbottom < objectbottom
   );
 }
-
+// i refactored till here 
 function catchPan() {
   for (var i = 0; i < pansArray.length; i++) {
     let object = pansArray[i];
@@ -272,7 +269,7 @@ function catchPan() {
       object.intersects = true;
       score += 10;
       displayScore.innerText = `${score}`;
-      if (score >= 100 && score % 100 === 0) {
+      if (score > 50 && score % 50 === 0) {
         level += 1;
         panSpeed += level;
         displayLevel.innerText = `${level}`;
@@ -318,7 +315,7 @@ function win() {
   clearInterval(draw, 10);
   pan1.pause();
   snoring.play();
-  winScreen();
+  drawWinScreen();
 }
 
 
@@ -337,6 +334,10 @@ window.onload = function () {
   mom = new Parent(momImg, 100, 150, 350, 650)
   displayScore = document.getElementById("score");
   displayLevel = document.getElementById("level");
+  audiosArray = [pan1, femaleRelief, crying, snoring, drinkingCoffee];
+
+
+  // audiosArray = [...document.querySelectorAll("audio")];
 
 
   startScreen();
@@ -345,23 +346,39 @@ window.onload = function () {
   // Start Button
   document.getElementById("start-button").onclick = function () {
     if (gameDone) {
-      startGame();
+      initialize();
       gameDone = false;
     }
   }
 
-  window.onkeydown = (event) => {
-    if (event.keyCode === 39) {
-      mom.moveRight();
-    } else if (event.keyCode === 37) {
-      mom.moveLeft();
-    }
+  //mute button Need help with this 
+  document.getElementById("mute-button").onclick = function () {
+    console.log("button here")
 
-    // document.getElementById("mute-button").onclick = muteAudio()
+    audiosArray.forEach((audio) => {
+      if (audio.muted) {
+        audio.muted = false;
+      } else {
+        audio.muted = true;
+      }
+    })
+  }
+}
+
+window.onkeydown = (event) => {
+  if (event.keyCode === 39) {
+    mom.moveRight();
+  } else if (event.keyCode === 37) {
+    mom.moveLeft();
   }
 
-
 }
+
+// audiosArray.forEach((audio) => {
+//   console.log(audio);
+//   audio.pause()
+
+//}
 
 
 /* QUESTIONS

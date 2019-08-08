@@ -22,10 +22,11 @@ body {
   margin-top: 40px;
 }
 
-.quiet {
-  width: 30vh;
-  height: 35vh;
-  margin-bottom: 20px;
+canvas {
+  background-image: url("./images/sleeping-baby.jpg");
+  background-repeat: repeat-y;
+  background-size: 790px 790px;
+  background-position: center;
 }
 
 p {
@@ -41,14 +42,14 @@ button {
   cursor: pointer;
 }
 
+.quiet {
+  width: 30vh;
+  height: 35vh;
+  margin-bottom: 20px;
+}
+
 .game-intro {
   height: 70vh;
-}
-canvas {
-  background-image: url("./images/sleeping-baby.jpg");
-  background-repeat: repeat-y;
-  background-size: 790px 790px;
-  background-position: center;
 }
 
 #game-score {
