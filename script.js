@@ -37,38 +37,26 @@ let randomBabyImage = cryingBabiesImages[Math.floor(Math.random() * cryingBabies
 const sleepingBabyImage = new Image();
 sleepingBabyImage.src = "./images/sleeping-baby.jpeg";
 
-const pacifier = new Image();
-pacifier.src = "./images/pacifier.jpeg";
+const pacifierImg = new Image();
+pacifierImg.src = "./images/pacifier.jpeg";
 
-let pacifiers = [];
-
+let displayObjectArray = [];
 let lives = 3;
-
 let audiosArray;
-
 let score = 0;
-
 let displayScore;
-
 let displayLevel;
-
 let gameDone = true;
-
 let level = 0;
-
-let panSpeed = 10;
-
 let parentSpeedLeft = 20;
-
 let parentSpeedRight = 20;
-
 let canvas;
 let ctx;
 let mom;
 let pan;
-let pansArray = [];
-let coffeeArray = [];
 let frameCounter = 0;
+
+// move logic to classes, create only one object array "display objects" and this object should have a speed 
 
 class Parent {
   constructor(image, width, height, x, y) {
@@ -80,13 +68,13 @@ class Parent {
   }
 
   moveRight() {
-    if (this.x < 730) {
+    if (this.x < 470) {
       this.x += parentSpeedRight;
     }
   }
 
   moveLeft() {
-    if (this.x > -30) {
+    if (this.x > -10) {
       this.x -= parentSpeedLeft;
     }
   }
@@ -94,69 +82,112 @@ class Parent {
   draw() {
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
   }
-
 }
 
-class SleepEnemy {
+class DisplayObject {
   constructor() {
-    this.x = Math.floor(Math.random() * (canvas.width - 80));
-    this.y = 0;//Math.floor(Math.random() * -100);
-    this.height = 50;
-    this.width = 80;
+    this.x = Math.floor(Math.random() * (canvas.width - 60));
+    this.y = 0;
+    this.height = 40;
+    this.width = 60;
+    this.speed = 10;
   }
 }
 
-class Pan extends SleepEnemy {
+class Pan extends DisplayObject {
   constructor(image) {
-    super()
+    super();
     this.image = image;
   }
   draw() {
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
   }
+
+  collect() {
+    score += 10;
+    femaleRelief.play();
+  }
+
+  drop() {
+    lives--;
+    pan1.play();
+  }
+
 }
 
-class Coffee {
+class Coffee extends DisplayObject {
   constructor() {
+    super();
     this.x = Math.floor(Math.random() * canvas.width - 50);
     this.y = 0;
     this.height = 40;
     this.width = 60;
     this.image = coffeeImg;
+    this.speed = 20;
   }
   draw() {
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
   }
+
+  collect() {
+    drinkingCoffee.play();
+    parentSpeedLeft += 3;
+    parentSpeedRight += 3;
+  }
+
+  drop() {
+
+  }
+}
+
+class Pacifier extends DisplayObject {
+  constructor() {
+    super();
+    this.image = pacifierImg;
+    this.speed = 20;
+    this.height = 18;
+    this.width = 14;
+  }
+  draw() {
+    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+  }
+
+  collect() {
+    lives++;
+  }
+
+  drop() {
+  }
 }
 
 function startScreen() {
-  ctx.drawImage(startImage, 0, 0, 800, 800);
+  ctx.drawImage(startImage, 0, 0, 530, 530);
   ctx.font = "bold 30px baby";
   ctx.fillText(
     "Try to catch anything that can wake the baby by falling",
-    32,
+    25,
     35
   ),
     ctx.font = "bold 30px baby";
   ctx.fillText("Use the left and right arrows",
     26,
-    140);
+    90);
   (ctx.font = "bold 25px baby");
-  ctx.fillText("And don't forget to drink your coffee !", 400, 160);
+  ctx.fillText("And don't forget to drink ", 294, 160);
+  (ctx.font = "bold 25px baby");
+  ctx.fillText("your coffee !", 400, 200);
 }
 
 function drawWakeUpScreen() {
-  ctx.drawImage(randomBabyImage, 0, 0, 800, 800);
+  ctx.drawImage(randomBabyImage, 0, 0, 530, 530);
   displayScore.innerText = "Game Over";
   displayLevel.innerText = "ten and counting..."
 }
 
-
 function drawWinScreen() {
-  ctx.drawImage(sleepingBabyImage, 0, 0, 800, 800);
+  ctx.drawImage(sleepingBabyImage, 0, 0, 530, 530);
   displayScore.innerText = "Win!";
 }
-
 
 function initialize() {
   gameDone = false;
@@ -165,8 +196,7 @@ function initialize() {
   lives = 3;
   score = 0;
   level = 0;
-  pacifiers = [];
-  pansArray = [];
+  displayObjectArray = [];
   crying.pause();
   snoring.pause();
 }
@@ -174,7 +204,7 @@ function initialize() {
 function drawLives() {
   space = 0;
   for (let i = 0; i < lives; i++) {
-    ctx.drawImage(pacifier, 10 + space, 10, 24, 24);
+    ctx.drawImage(pacifierImg, 10 + space, 10, 20, 20);
     space += 34;
   }
 }
@@ -183,28 +213,24 @@ function playGame() {
   ctx.clearRect(0, 0, 800, 850);
   drawLives();
   mom.draw();
-  pansArray.forEach((pan) => {
-    pan.draw()
-  })
-  coffeeArray.forEach((coffee) => {
-    coffee.draw()
+  displayObjectArray.forEach((object) => {
+    object.draw()
   })
 
   if (frameCounter % 10 === 0) {
-    pansArray.forEach((pan) => {
-      pan.y += panSpeed;
-    })
-    coffeeArray.forEach((coffee) => {
-      coffee.y += 20;
+    displayObjectArray.forEach((object) => {
+      object.y += object.speed;
     })
   }
   // every three seconds
   if (frameCounter % 180 === 0 && !gameDone) {
-    pansArray.push(new Pan(panImages[Math.floor(Math.random() * panImages.length)]));
+    displayObjectArray.push(new Pan(panImages[Math.floor(Math.random() * panImages.length)]));
+  }
 
+  if (frameCounter % (60 * 100) === 0) { // how can I control this other than that?
+    displayObjectArray.push(new Pacifier());
   }
   catchPan();
-  drinkCoffee();
   frameCounter++;
 }
 
@@ -228,7 +254,6 @@ function draw() {
   }
 }
 
-
 function intersectParent(parent, object) {
   let parentleft = parent.x;
   let parenttop = parent.y;
@@ -248,8 +273,7 @@ function intersectParent(parent, object) {
 }
 
 function intersectGround(object) {
-
-  let groundbottom = 800;
+  let groundbottom = 530;
   let objectbottom = object.y + object.height;
   return (
     groundbottom < objectbottom
@@ -257,53 +281,33 @@ function intersectGround(object) {
 }
 
 function catchPan() {
-  for (var i = 0; i < pansArray.length; i++) {
-    let object = pansArray[i];
+  for (var i = 0; i < displayObjectArray.length; i++) {
+    let object = displayObjectArray[i];
 
     if (intersectGround(object)) {
-      pan1.play();
       object.intersects = true;
-      lives -= 1;
+      object.drop();
     } else if (intersectParent(mom, object)) {
-      femaleRelief.play();
       object.intersects = true;
-      score += 10;
-      displayScore.innerText = `${score}`;
+      object.collect();
+      displayScore.innerText = score;
       if (score > 50 && score % 50 === 0) {
         level += 1;
-        panSpeed += level;
-        displayLevel.innerText = `${level}`;
-        if (level % 1 === 0) {
-          coffeeArray.push(new Coffee());
-        }
-        if (level === 10) { // is this really necessary?
-          level === 0;
-        }
-        if (level % 2 === 0) {
-          parentSpeedLeft -= 2;
-          parentSpeedRight -= 2;
-        }
+        object.speed += level;// maybe hardcode a value 
+        displayLevel.innerText = level;
+        displayObjectArray.push(new Coffee());
+      }
+      // if (level % 2 === 0) {
+      //   parentSpeedLeft -= 2;
+      //   parentSpeedRight -= 2;
+      //}
+      if (score >= 70 && score % 70 === 0) {
+        displayObjectArray.push(new Pacifier());
       }
     }
   }
-  pansArray = pansArray.filter(obj => !obj.intersects);
+  displayObjectArray = displayObjectArray.filter(obj => !obj.intersects);
 }
-
-function drinkCoffee() {
-  for (var i = 0; i < coffeeArray.length; i++) {
-    let object = coffeeArray[i];
-    if (intersectGround(object)) {
-      object.intersects = true;
-      drinkingCoffee.play();
-    } else if (intersectParent(mom, object)) {
-      object.intersects = true;
-      parentSpeedLeft += 3;
-      parentSpeedRight += 3;
-    }
-  }
-  coffeeArray = coffeeArray.filter(obj => !obj.intersects);
-}
-
 
 function gameOver() {
   gameDone = true;
@@ -321,7 +325,7 @@ function win() {
 window.onload = function () {
   canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
-  mom = new Parent(momImg, 100, 150, 350, 650)
+  mom = new Parent(momImg, 67, 100, 265, 435)
   displayScore = document.getElementById("score");
   displayLevel = document.getElementById("level");
   audiosArray = [pan1, femaleRelief, crying, snoring, drinkingCoffee];
@@ -356,11 +360,7 @@ window.onkeydown = (event) => {
 
 }
 
-// audiosArray.forEach((audio) => {
-//   console.log(audio);
-//   audio.pause()
 
-//}
 
 
 /* QUESTIONS
