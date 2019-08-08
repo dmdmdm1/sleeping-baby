@@ -255,7 +255,7 @@ function intersectGround(object) {
     groundbottom < objectbottom
   );
 }
-// i refactored till here 
+
 function catchPan() {
   for (var i = 0; i < pansArray.length; i++) {
     let object = pansArray[i];
@@ -318,16 +318,6 @@ function win() {
   drawWinScreen();
 }
 
-
-// let silence1 = false;
-
-// function muteAudio() {
-//   if (silence1) audio.muted = true;
-//   else audio.muted = false;
-//   silence1 = !silence;
-// }
-
-
 window.onload = function () {
   canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
@@ -336,14 +326,9 @@ window.onload = function () {
   displayLevel = document.getElementById("level");
   audiosArray = [pan1, femaleRelief, crying, snoring, drinkingCoffee];
 
-
-  // audiosArray = [...document.querySelectorAll("audio")];
-
-
   startScreen();
   setInterval(draw, 10);
 
-  // Start Button
   document.getElementById("start-button").onclick = function () {
     if (gameDone) {
       initialize();
@@ -351,10 +336,7 @@ window.onload = function () {
     }
   }
 
-  //mute button Need help with this 
   document.getElementById("mute-button").onclick = function () {
-    console.log("button here")
-
     audiosArray.forEach((audio) => {
       if (audio.muted) {
         audio.muted = false;
