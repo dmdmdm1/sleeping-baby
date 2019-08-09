@@ -227,6 +227,7 @@ function playGame() {
   displayObjectArray.forEach((object) => {
     object.draw()
   })
+  music.play();
 
   if (frameCounter % 10 === 0) {
     displayObjectArray.forEach((object) => {
@@ -323,6 +324,7 @@ function collectOrDrop() {
 
 function gameOver() {
   gameDone = true;
+  music.pause();
   drawWakeUpScreen();
 }
 
@@ -330,6 +332,7 @@ function win() {
   gameDone = true;
   clearInterval(draw, 10);
   pan1.pause();
+  music.pause();
   snoring.play();
   drawWinScreen();
 }
@@ -340,7 +343,7 @@ window.onload = function () {
   mom = new Parent(momImg, 67, 100, 265, 435)
   displayScore = document.getElementById("score");
   displayLevel = document.getElementById("level");
-  audiosArray = [pan1, shhh, crying, snoring, drinkingCoffee, paci];
+  audiosArray = [music, pan1, shhh, crying, snoring, drinkingCoffee, paci];
 
   startScreen();
   setInterval(draw, 10);
