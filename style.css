@@ -45,6 +45,11 @@ button {
   margin-left: 5px;
 }
 
+.buttons {
+  display: flex;
+  align-content: space-between;
+}
+
 .game-intro {
   height: 70vh;
 }

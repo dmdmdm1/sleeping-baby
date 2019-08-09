@@ -356,8 +356,10 @@ window.onload = function () {
     audiosArray.forEach((audio) => {
       if (audio.muted) {
         audio.muted = false;
+        document.getElementById("mute-button").innerText = "🔊";
       } else {
         audio.muted = true;
+        document.getElementById("mute-button").innerText = "🔇";
       }
     })
   }
