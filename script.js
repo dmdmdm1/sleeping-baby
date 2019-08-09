@@ -102,7 +102,7 @@ class Pan extends DisplayObject {
 
   collect() {
     score += 10;
-    femaleRelief.play();
+    shhh.play();
   }
 
   drop() {
@@ -150,6 +150,7 @@ class Pacifier extends DisplayObject {
   }
 
   collect() {
+    paci.play();
     lives++;
   }
 
@@ -339,7 +340,7 @@ window.onload = function () {
   mom = new Parent(momImg, 67, 100, 265, 435)
   displayScore = document.getElementById("score");
   displayLevel = document.getElementById("level");
-  audiosArray = [pan1, femaleRelief, crying, snoring, drinkingCoffee];
+  audiosArray = [pan1, shhh, crying, snoring, drinkingCoffee, paci];
 
   startScreen();
   setInterval(draw, 10);
