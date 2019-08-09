@@ -45,8 +45,8 @@ let displayScore;
 let displayLevel;
 let gameDone = true;
 let level = 0;
-let parentSpeedLeft = 20;
-let parentSpeedRight = 20;
+let parentSpeedLeft = 11;
+let parentSpeedRight = 11;
 let canvas;
 let ctx;
 let mom;
@@ -120,7 +120,7 @@ class Coffee extends DisplayObject {
     this.height = 40;
     this.width = 60;
     this.image = coffeeImg;
-    this.speed = 20;
+    this.speed = 15;
   }
   draw() {
     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
@@ -128,8 +128,8 @@ class Coffee extends DisplayObject {
 
   collect() {
     drinkingCoffee.play();
-    parentSpeedLeft += 3;
-    parentSpeedRight += 3;
+    parentSpeedLeft += 1;
+    parentSpeedRight += 1;
   }
 
   drop() {
@@ -240,14 +240,14 @@ function playGame() {
   if (frameCounter % (60 * 100) === 0) { // how can I control this other than that?
     displayObjectArray.push(new Pacifier());
   }
-  catchPan();
+  collectOrDrop();
   frameCounter++;
 }
 
 function draw() {
   if (lives > 0 && !gameDone) {
     playGame();
-    if (score >= 150) {
+    if (score >= 500) {
       win();
     }
   } else if (lives < 1) {
@@ -290,7 +290,7 @@ function intersectGround(object) {
   );
 }
 
-function catchPan() {
+function collectOrDrop() {
   for (var i = 0; i < displayObjectArray.length; i++) {
     let object = displayObjectArray[i];
 
@@ -301,17 +301,19 @@ function catchPan() {
       object.intersects = true;
       object.collect();
       displayScore.innerText = score;
-      if (score > 50 && score % 50 === 0) {
+      if (score >= 50 && score % 50 === 0) {
         level += 1;
-        object.speed += level;// maybe hardcode a value 
+        object.speed += 2;
+        console.log(`object: ${object.speed}`);
         displayLevel.innerText = level;
-        displayObjectArray.push(new Coffee());
       }
-      // if (level % 2 === 0) {
-      //   parentSpeedLeft -= 2;
-      //   parentSpeedRight -= 2;
-      //}
-      if (score >= 70 && score % 70 === 0) {
+      if (score >= 100 && score % 100 === 0) {
+        displayObjectArray.push(new Coffee());
+        parentSpeedLeft -= 1;
+        parentSpeedRight -= 1;
+        console.log(`parent: ${parentSpeedRight}`);
+      }
+      if (score >= 200 && score % 200 === 0) {
         displayObjectArray.push(new Pacifier());
       }
     }
