@@ -19,21 +19,15 @@ const coffeeImg = new Image();
 coffeeImg.src = "./images/coffee.jpeg";
 
 const crying1Img = new Image();
-crying1Img.src = "./images/crying1.jpeg";
+crying1Img.src = "./images/crying5.jpeg";
 
 const crying2Img = new Image();
 crying2Img.src = "./images/crying2.jpeg";
 
 const crying3Img = new Image();
-crying3Img.src = "./images/crying4.jpeg";
+crying3Img.src = "./images/crying4.png";
 
-const crying4Img = new Image();
-crying4Img.src = "./images/crying5.jpeg";
-
-const crying5Img = new Image();
-crying5Img.src = "./images/crying6.jpeg";
-
-const cryingBabiesImages = [crying1Img, crying2Img, crying3Img, crying4Img, crying5Img];
+const cryingBabiesImages = [crying1Img, crying2Img, crying3Img];
 
 let randomBabyImage = cryingBabiesImages[Math.floor(Math.random() * cryingBabiesImages.length)]
 
@@ -194,7 +188,7 @@ function startScreen() {
 }
 
 function drawWakeUpScreen() {
-  ctx.drawImage(randomBabyImage, 0, 0, 530, 530);
+  ctx.drawImage(crying3Img, 0, 0, 530, 530);
   displayScore.innerText = "Game Over";
   displayLevel.innerText = "ten and counting..."
 }
