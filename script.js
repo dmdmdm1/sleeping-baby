@@ -45,8 +45,8 @@ let displayScore;
 let displayLevel;
 let gameDone = true;
 let level = 0;
-let parentSpeedLeft = 11;
-let parentSpeedRight = 11;
+let parentSpeedLeft = 13;
+let parentSpeedRight = 13;
 let canvas;
 let ctx;
 let mom;
@@ -141,7 +141,7 @@ class Pacifier extends DisplayObject {
   constructor() {
     super();
     this.image = pacifierImg;
-    this.speed = 20;
+    this.speed = 15;
     this.height = 18;
     this.width = 14;
   }
@@ -259,9 +259,10 @@ function draw() {
       }, 10000);
     }
     gameOver();
-  } else if (score >= 150) {
-    win();
   }
+  // } else if (score >= 150) {
+  //   win();
+  // }
 }
 
 function intersectParent(parent, object) {
@@ -303,15 +304,13 @@ function collectOrDrop() {
       displayScore.innerText = score;
       if (score >= 50 && score % 50 === 0) {
         level += 1;
-        object.speed += 2;
-        console.log(`object: ${object.speed}`);
+        object.speed += 1.5;
         displayLevel.innerText = level;
       }
       if (score >= 100 && score % 100 === 0) {
         displayObjectArray.push(new Coffee());
         parentSpeedLeft -= 1;
         parentSpeedRight -= 1;
-        console.log(`parent: ${parentSpeedRight}`);
       }
       if (score >= 200 && score % 200 === 0) {
         displayObjectArray.push(new Pacifier());
