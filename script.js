@@ -1,6 +1,9 @@
 const startImage = new Image();
 startImage.src = "./images/baby-start.png";
 
+const blueBackground = new Image();
+blueBackground.src = "./images/blue.jpeg"
+
 const momImg = new Image();
 momImg.src = "./images/momavatar.png";
 
@@ -184,7 +187,7 @@ function startScreen() {
   (ctx.font = "bold 20px baby");
   ctx.fillText("- Don't forget to drink your coffee ☕️ !", 51, 330);
   (ctx.font = "bold 20px baby");
-  ctx.fillText(` Press the "Start"  button when you're ready 😁`, 51, 410);
+  ctx.fillText(` Press the "Start Game" button when you're ready 😁`, 51, 410);
   (ctx.font = "bold 20px baby");
   ctx.fillText(`👶👶👶`, 220, 470);
 
@@ -197,7 +200,8 @@ function drawWakeUpScreen() {
 }
 
 function drawWinScreen() {
-  ctx.drawImage(sleepingBabyImage, 0, 0, 530, 530);
+  ctx.drawImage(startImage, 0, 0, 530, 530);
+  ctx.drawImage(blueBackground, 50, 90, 433, 352);
   displayScore.innerText = "Win!";
 }
 
