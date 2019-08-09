@@ -1,5 +1,5 @@
 const startImage = new Image();
-startImage.src = "./images/baby-start.jpg";
+startImage.src = "./images/baby-start.png";
 
 const momImg = new Image();
 momImg.src = "./images/momavatar.png";
@@ -162,20 +162,32 @@ class Pacifier extends DisplayObject {
 
 function startScreen() {
   ctx.drawImage(startImage, 0, 0, 530, 530);
-  ctx.font = "bold 30px baby";
+  ctx.font = "bold 25px baby";
   ctx.fillText(
-    "Try to catch anything that can wake the baby by falling",
-    25,
-    35
+    "Instructions",
+    220,
+    80),
+    ctx.font = "bold 20px baby";
+  ctx.fillText(
+    "- Try to catch anything that can wake the baby by falling",
+    50,
+    145
   ),
-    ctx.font = "bold 30px baby";
-  ctx.fillText("Use the left and right arrows",
-    26,
-    90);
-  (ctx.font = "bold 25px baby");
-  ctx.fillText("And don't forget to drink ", 294, 160);
-  (ctx.font = "bold 25px baby");
-  ctx.fillText("your coffee !", 400, 200);
+    ctx.font = "bold 20px baby";
+  ctx.fillText(" using the left and right arrows ⬅️➡️.",
+    55,
+    190);
+  ctx.font = "bold 20px baby";
+  ctx.fillText("- The pacifier can be a real life saver 🍀.",
+    51,
+    265);
+  (ctx.font = "bold 20px baby");
+  ctx.fillText("- Don't forget to drink your coffee ☕️ !", 51, 330);
+  (ctx.font = "bold 20px baby");
+  ctx.fillText(` Press the "Start"  button when you're ready 😁`, 51, 410);
+  (ctx.font = "bold 20px baby");
+  ctx.fillText(`👶👶👶`, 220, 470);
+
 }
 
 function drawWakeUpScreen() {
