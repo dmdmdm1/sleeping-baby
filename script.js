@@ -29,7 +29,8 @@ crying3Img.src = "./images/crying4.png";
 
 const cryingBabiesImages = [crying1Img, crying2Img, crying3Img];
 
-let randomBabyImage = cryingBabiesImages[Math.floor(Math.random() * cryingBabiesImages.length)]
+// _.sample
+let randomBabyImage = _.sample(cryingBabiesImages)
 
 const sleepingBabyImage = new Image();
 sleepingBabyImage.src = "./images/sleeping-baby.jpeg";
@@ -37,21 +38,24 @@ sleepingBabyImage.src = "./images/sleeping-baby.jpeg";
 const pacifierImg = new Image();
 pacifierImg.src = "./images/pacifier.jpeg";
 
-let displayObjectArray = [];
-let lives = 3;
-let audiosArray;
+let level = 0;
 let score = 0;
+let lives = 3;
+
+let displayObjectArray = [];
+let audiosArray;
+
 let displayScore;
 let displayLevel;
-let gameDone = true;
-let level = 0;
-let parentSpeedLeft = 13;
-let parentSpeedRight = 13;
+
+
 let canvas;
 let ctx;
 let mom;
 let pan;
 let frameCounter = 0;
+
+let gameDone = true;
 
 // move logic to classes, create only one object array "display objects" and this object should have a speed 
 
@@ -61,7 +65,9 @@ class Parent {
       this.height = height,
       this.x = x,
       this.y = y,
-      this.image = image
+      this.image = image,
+      this.speedLeft = 13,
+      this.speedRight = 13
   }
 
   moveRight() {
@@ -89,6 +95,9 @@ class DisplayObject {
     this.width = 60;
     this.speed = 10;
   }
+  draw() {
+    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+  }
 }
 
 class Pan extends DisplayObject {
@@ -97,7 +106,7 @@ class Pan extends DisplayObject {
     this.image = image;
   }
   draw() {
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    super.draw()
   }
 
   collect() {
@@ -123,7 +132,7 @@ class Coffee extends DisplayObject {
     this.speed = 15;
   }
   draw() {
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    super.draw()
   }
 
   collect() {
@@ -146,7 +155,7 @@ class Pacifier extends DisplayObject {
     this.width = 14;
   }
   draw() {
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    super.draw()
   }
 
   collect() {
@@ -154,23 +163,22 @@ class Pacifier extends DisplayObject {
     lives++;
   }
 
-  drop() {
-  }
+  drop() {}
 }
 
-function startScreen() {
+function drawStartScreen() {
   ctx.drawImage(startImage, 0, 0, 530, 530);
   ctx.font = "bold 25px baby";
   ctx.fillText(
-    "Instructions",
-    220,
-    80),
+      "Instructions",
+      220,
+      80),
     ctx.font = "bold 20px baby";
   ctx.fillText(
-    "- Try to catch anything that can wake the baby by falling",
-    50,
-    145
-  ),
+      "- Try to catch anything that can wake the baby by falling",
+      50,
+      145
+    ),
     ctx.font = "bold 20px baby";
   ctx.fillText(" using the left and right arrows ⬅️➡️.",
     55,
@@ -220,7 +228,7 @@ function drawLives() {
   }
 }
 
-function playGame() {
+function draw() {
   ctx.clearRect(0, 0, 800, 850);
   drawLives();
   mom.draw();
@@ -229,6 +237,9 @@ function playGame() {
   })
   music.play();
 
+}
+
+function addNewObjects() {
   if (frameCounter % 10 === 0) {
     displayObjectArray.forEach((object) => {
       object.y += object.speed;
@@ -242,29 +253,20 @@ function playGame() {
   if (frameCounter % (60 * 100) === 0) { // how can I control this other than that?
     displayObjectArray.push(new Pacifier());
   }
-  collectOrDrop();
-  frameCounter++;
 }
 
-function draw() {
+function loop() {
   if (lives > 0 && !gameDone) {
-    playGame();
+    draw();
+    addNewObjects()
+    collectOrDrop();
     if (score >= 500) {
       win();
     }
-  } else if (lives < 1) {
-    if (!gameDone) {
-      crying.play()
-      setTimeout(() => {
-        crying.pause();
-        crying.currentTime = 0;
-      }, 10000);
-    }
+    frameCounter++;
+  } else {
     gameOver();
   }
-  // } else if (score >= 150) {
-  //   win();
-  // }
 }
 
 function intersectParent(parent, object) {
@@ -324,18 +326,27 @@ function collectOrDrop() {
 
 function gameOver() {
   gameDone = true;
+  clearInterval(intervalID);
+  // plays crying once
+  crying.play()
+  setTimeout(() => {
+    crying.pause();
+    crying.currentTime = 0;
+  }, 10000);
   music.pause();
   drawWakeUpScreen();
 }
 
 function win() {
   gameDone = true;
-  clearInterval(draw, 10);
+  clearInterval(intervalID);
   pan1.pause();
   music.pause();
   snoring.play();
   drawWinScreen();
 }
+
+let intervalID;
 
 window.onload = function () {
   canvas = document.getElementById('canvas');
@@ -346,12 +357,12 @@ window.onload = function () {
   audiosArray = [music, pan1, shhh, crying, snoring, drinkingCoffee, paci];
 
   startScreen();
-  setInterval(draw, 10);
+  intervalID = setInterval(draw, 10);
 
   document.getElementById("start-button").onclick = function () {
+    document.getElementById("start-button").setAttribute()
     if (gameDone) {
       initialize();
-      gameDone = false;
     }
   }
 
@@ -386,5 +397,3 @@ HOW TO STOP THE SOUNDS
 
 appreciate `a code review, clean code and well organized
 */
-
-
